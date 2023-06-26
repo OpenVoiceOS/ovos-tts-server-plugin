@@ -11,8 +11,8 @@ class OVOSServerTTS(TTS):
     def get_tts(self, sentence, wav_file, lang=None, voice=None):
         lang = lang or self.lang
         voice = voice or self.voice
-        params={"lang": lang, "voice": voice}
-        if not voice == "default":
+        params = {"lang": lang, "voice": voice}
+        if not voice or voice == "default":
             params.pop("voice")
         data = requests.get(f"{self.host}/synthesize/{sentence}",
                             params=params).content
