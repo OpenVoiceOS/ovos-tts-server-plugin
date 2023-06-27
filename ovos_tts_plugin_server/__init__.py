@@ -1,12 +1,14 @@
 import requests
+import random
 from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSException
 
 
 class OVOSServerTTS(TTS):
-    public_servers = (
+    public_servers = [
         "https://mimic3.ziggyai.online/",
         "https://tts.smartgic.io/mimic3/"
-    )
+    ]
+    random.shuffle(public_servers)  # Spread the load among all public servers
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, audio_ext="wav",
