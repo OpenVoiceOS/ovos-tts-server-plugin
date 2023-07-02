@@ -12,7 +12,7 @@ class OVOSServerTTS(TTS):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, audio_ext="wav",
                          validator=OVOSServerTTSValidator(self))
-        self.host = self.config.get("host") or "http://0.0.0.0:9666"
+        self.host = self.config.get("host", None)
 
     def get_tts(self, sentence, wav_file, lang=None, voice=None):
         lang = lang or self.lang
