@@ -5,8 +5,10 @@ from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSExcept
 
 class OVOSServerTTS(TTS):
     public_servers = [
-        "https://mimic3.ziggyai.online/",
-        "https://tts.smartgic.io/mimic3/"
+        "https://pipertts.ziggyai.online",
+        "https://tts.smartgic.io/piper",
+        "https://mimic3.ziggyai.online",
+        "https://tts.smartgic.io/mimic3"
     ]
 
     def __init__(self, *args, **kwargs):
