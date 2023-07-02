@@ -8,7 +8,6 @@ class OVOSServerTTS(TTS):
         "https://mimic3.ziggyai.online/",
         "https://tts.smartgic.io/mimic3/"
     ]
-    random.shuffle(public_servers)  # Spread the load among all public servers
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, audio_ext="wav",
@@ -22,16 +21,20 @@ class OVOSServerTTS(TTS):
         if not voice or voice == "default":
             params.pop("voice")
         if self.host:
-            data = requests.get(f"{self.host}/synthesize/{sentence}",
-                                params=params).content
+            if isinstance(self.host, str):
+                servers = [self.host]
+            else:
+                servers = self.host
         else:
-            data = self._get_from_public_servers(params, sentence)
+            servers = self.public_servers
+        data = self._get_from_servers(params, sentence, servers)
         with open(wav_file, "wb") as f:
             f.write(data)
         return wav_file, None
 
-    def _get_from_public_servers(self, params: dict, sentence: str):
-        for url in self.public_servers:
+    def _get_from_servers(self, params: dict, sentence: str, servers: list):
+        random.shuffle(servers)  # Spread the load among all public servers
+        for url in servers:
             try:
                 r = requests.get(f'{url}/synthesize/{sentence}',
                                  params=params)
@@ -39,7 +42,7 @@ class OVOSServerTTS(TTS):
                     return r.content
             except:
                 continue
-        raise RemoteTTSException(f"All OVOS TTS public servers are down!")
+        raise RemoteTTSException(f"All OVOS TTS servers are down!")
 
 
 class OVOSServerTTSValidator(TTSValidator):
