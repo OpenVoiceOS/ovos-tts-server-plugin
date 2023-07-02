@@ -26,14 +26,14 @@ class OVOSServerTTS(TTS):
             else:
                 servers = self.host
         else:
-            servers = self.public_servers
+            servers = self.public_servers            
+            random.shuffle(servers)  # Spread the load among all public servers
         data = self._get_from_servers(params, sentence, servers)
         with open(wav_file, "wb") as f:
             f.write(data)
         return wav_file, None
 
     def _get_from_servers(self, params: dict, sentence: str, servers: list):
-        random.shuffle(servers)  # Spread the load among all public servers
         for url in servers:
             try:
                 r = requests.get(f'{url}/synthesize/{sentence}',
