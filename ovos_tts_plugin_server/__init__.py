@@ -4,9 +4,6 @@ from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSExcept
 
 
 class OVOSServerTTS(TTS):
-    public_servers_v2 = [
-        "https://tts.smartgic.io/piper"
-    ]
     public_servers = [
         "https://pipertts.ziggyai.online",
         "https://tts.smartgic.io/piper"
@@ -16,7 +13,7 @@ class OVOSServerTTS(TTS):
         super().__init__(*args, **kwargs, audio_ext="wav",
                          validator=OVOSServerTTSValidator(self))
         self.host = self.config.get("host", None)
-        self.v2 = self.config.get("v2", False)
+        self.v2 = self.config.get("v2", self.host is None) # if using public servers, default to v2, else v1
 
     def get_tts(self, sentence, wav_file, lang=None, voice=None):
         lang = lang or self.lang
@@ -30,10 +27,7 @@ class OVOSServerTTS(TTS):
             else:
                 servers = self.host
         else:
-            if self.v2:
-                servers = self.public_servers_v2   
-            else:                
-                servers = self.public_servers 
+            servers = self.public_servers 
         data = self._get_from_servers(params, sentence, servers)
         with open(wav_file, "wb") as f:
             f.write(data)
