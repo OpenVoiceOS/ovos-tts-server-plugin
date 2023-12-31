@@ -20,8 +20,9 @@ pip install ovos-tts-plugin-server
 ```
 
 If using a Piper TTS server since version 0.0.1a9, you can use the
-`/v2` endpoint to take advantage of newer features. Be sure to include that
-in the `host` value if you'd like to use it. Example: `https://tts.smartgic.io/piper/v2`
+`/v2` endpoint to take advantage of newer features. There is no need to change
+the `host`, however. It would always look something like: `https://tts.smartgic.io/piper`
+regardless of the `v2` value.
 
 Please note that while you can set `verify_ssl` to `false` to disable SSL
 verification, this is not recommended and should only be used for testing
