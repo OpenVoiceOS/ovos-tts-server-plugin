@@ -5,7 +5,8 @@ from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSExcept
 
 class OVOSServerTTS(TTS):
     public_servers_v2 = [
-        "https://tts.smartgic.io/piper"
+        "https://tts.smartgic.io/piper",
+        "https://pipertts.ziggyai.online"
     ]
     public_servers = [
         "https://pipertts.ziggyai.online",
