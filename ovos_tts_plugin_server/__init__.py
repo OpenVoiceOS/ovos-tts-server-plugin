@@ -1,3 +1,4 @@
+from typing import Optional
 import requests
 import random
 from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSException
@@ -17,16 +18,16 @@ class OVOSServerTTS(TTS):
                              "only be used for test systems! Please set up a valid certificate!")
 
     @property
-    def host(self):
+    def host(self) -> Optional[str]:
         return self.config.get("host", None)
 
     @property
-    def v2(self):
+    def v2(self) -> bool:
         """If using default public servers, default to v2, else v1"""
         return self.config.get("v2", self.host is None)
 
     @property
-    def verify_ssl(self):
+    def verify_ssl(self) -> bool:
         return self.config.get("verify_ssl", True)
 
     def get_tts(self, sentence, wav_file, lang=None, voice=None):
