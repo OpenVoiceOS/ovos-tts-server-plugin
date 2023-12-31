@@ -1,3 +1,4 @@
+from typing import Optional
 import requests
 import random
 from ovos_plugin_manager.templates.tts import TTS, TTSValidator, RemoteTTSException
@@ -12,8 +13,22 @@ class OVOSServerTTS(TTS):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, audio_ext="wav",
                          validator=OVOSServerTTSValidator(self))
-        self.host = self.config.get("host", None)
-        self.v2 = self.config.get("v2", self.host is None) # if using public servers, default to v2, else v1
+        if not self.verify_ssl:
+            self.log.warning("SSL verification disabled, this is not secure and should"
+                             "only be used for test systems! Please set up a valid certificate!")
+
+    @property
+    def host(self) -> Optional[str]:
+        return self.config.get("host", None)
+
+    @property
+    def v2(self) -> bool:
+        """If using default public servers, default to v2, else v1"""
+        return self.config.get("v2", self.host is None)
+
+    @property
+    def verify_ssl(self) -> bool:
+        return self.config.get("verify_ssl", True)
 
     def get_tts(self, sentence, wav_file, lang=None, voice=None):
         lang = lang or self.lang
@@ -42,7 +57,7 @@ class OVOSServerTTS(TTS):
                     params["utterance"] = sentence
                 else:
                     url = f'{url}/synthesize/{sentence}'
-                r = requests.get(url, params=params)
+                r = requests.get(url, params=params, verify=self.verify_ssl)
                 if r.ok:
                     return r.content
             except:
