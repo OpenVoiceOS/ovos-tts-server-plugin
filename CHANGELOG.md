@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.2a9](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a9) (2023-12-31)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a8...0.0.2a9)
+
+**Implemented enhancements:**
+
+- feat: configurable tls [\#12](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/12) ([mikejgray](https://github.com/mikejgray))
+
+**Closed issues:**
+
+- Make TLS verification configurable [\#11](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/issues/11)
+
 ## [0.0.2a8](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a8) (2023-12-31)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a7...0.0.2a8)
