@@ -19,7 +19,7 @@ class OVOSServerTTS(TTS):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, audio_ext="wav", validator=OVOSServerTTSValidator(self))
-        self.log = LOG(name=__name__)
+        self.log = LOG
         if not self.verify_ssl:
             self.log.warning(
                 "SSL verification disabled, this is not secure and should"
