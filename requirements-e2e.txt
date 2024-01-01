@@ -1,0 +1,11 @@
+ovos-tts-plugin-piper~=0.0.0
+# ovos-tts-plugin-espeakng~=0.0.2 # May be bugged
+ovos-tts-plugin-mimic~=0.2.8
+ovos-tts-plugin-beepspeak~=0.0.1a1
+# ovos-tts-plugin-responsivevoice~=0.1.1 # May be bugged
+
+ovos-tts-server~=0.0.3a10
+
+pytest
+pytest-cov
+ovos-classifiers~=0.0.0a40

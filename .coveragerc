@@ -1,0 +1,5 @@
+[run]
+branch = True
+source = ovos_tts_plugin_server
+omit =
+    */version.py

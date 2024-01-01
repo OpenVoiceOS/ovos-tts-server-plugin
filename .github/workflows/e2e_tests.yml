@@ -1,0 +1,62 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master, dev]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - plugin: "ovos-tts-plugin-piper"
+            # image: "ghcr.io/openvoiceos/piper-tts-server:dev" # TODO: This doesn't exist yet
+            image: "ghcr.io/mikejgray/piper-tts-server:dev"
+          - plugin: "ovos-tts-plugin-espeakng"
+            image: "ghcr.io/openvoiceos/espeakng:dev"
+          - plugin: "ovos-tts-plugin-mimic"
+            image: "ghcr.io/openvoiceos/mimic:dev"
+          - plugin: "ovos-tts-plugin-beepspeak"
+            image: "ghcr.io/openvoiceos/beepspeak-tts-server:master"
+          - plugin: "ovos-tts-plugin-sam"
+            image: "ghcr.io/openvoiceos/sam:dev"
+
+    env:
+      PLUGIN_TO_TEST: ${{ matrix.plugin }}
+
+    services:
+      sam:
+        image: ${{ matrix.image }}
+        ports:
+          - 9666:9666
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-e2e.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pip install -U -r requirements.txt
+          pip install -U --pre -r requirements-e2e.txt
+          pip install .
+
+      - name: E2E Tests
+        run: |
+          pytest tests/e2e.py
