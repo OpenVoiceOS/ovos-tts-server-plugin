@@ -24,7 +24,7 @@ def tts_instance_factory():
 def test_initialization(tts_instance):
     assert tts_instance.audio_ext == "wav"
     assert tts_instance.validator is not None
-    assert isinstance(tts_instance.log, LOG)
+    assert tts_instance.log is LOG
     assert tts_instance.host is None
     assert tts_instance.v2 is True
     assert tts_instance.verify_ssl is True
