@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.2a10](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a10) (2024-01-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a9...0.0.2a10)
+
+**Closed issues:**
+
+- Test commonly used official plugins [\#13](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/issues/13)
+
+**Merged pull requests:**
+
+- feat: testing and cleanup [\#14](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/14) ([mikejgray](https://github.com/mikejgray))
+
 ## [0.0.2a9](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a9) (2023-12-31)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a8...0.0.2a9)
