@@ -32,7 +32,7 @@ class OVOSServerTTS(TTS):
         return self.urls
 
     @property
-    def urls(self) -> Optional[str]:
+    def urls(self) -> List[Any]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
         urls = self.config.get("host", self.config.get("hosts"))
         if urls and not isinstance(urls, list):
