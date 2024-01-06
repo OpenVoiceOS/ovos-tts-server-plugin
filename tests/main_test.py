@@ -180,6 +180,7 @@ def test_get_tts_server_lists(_, fetch_audio_data, tts_instance_factory):
     custom_hosts = ["https://customhost1.com", "https://customhost2.com"]
     tts_instance = tts_instance_factory(config={"host": custom_hosts})
     tts_instance.get_tts("test", "test.wav")
+    assert tts_instance.host == custom_hosts
     fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", custom_hosts)
 
 

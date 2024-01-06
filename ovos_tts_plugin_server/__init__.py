@@ -31,9 +31,6 @@ class OVOSServerTTS(TTS):
             hosts = [hosts]
         return hosts
 
-    # @property
-    # def public_servers(self) -> list:
-
     @property
     def v2(self) -> bool:
         """If using default public servers, default to v2, else v1"""
@@ -62,7 +59,8 @@ class OVOSServerTTS(TTS):
         if self.host:
             servers = self.host
         else:
-            servers = [random.shuffle(self.public_servers)]
+            random.shuffle(self.public_servers)
+            servers = self.public_servers
         data: bytes = self._fetch_audio_data(params, sentence, servers)
         self._write_audio_file(wav_file, data)
         return wav_file, None
@@ -80,6 +78,7 @@ class OVOSServerTTS(TTS):
                     params["utterance"] = sentence
                 else:
                     url = f"{url}/synthesize/{sentence}"
+                self.log.debug(f"Chosen TTS server {url}")
                 r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=30)
                 if r.ok:
                     return r.content
