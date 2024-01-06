@@ -41,6 +41,11 @@ class OVOSServerTTS(TTS):
         """Whether or not to verify SSL certificates when connecting to the server. Defaults to True."""
         return self.config.get("verify_ssl", True)
 
+    @property
+    def tts_timeout(self) -> int:
+        """Timeout for the TTS server. Defaults to 30 seconds."""
+        return self.config.get("tts_timeout", 30)
+
     def get_tts(
         self,
         sentence,
@@ -81,7 +86,9 @@ class OVOSServerTTS(TTS):
                     params["utterance"] = sentence
                 else:
                     url = f"{url}/synthesize/{sentence}"
-                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=30)
+                r: requests.Response = requests.get(
+                    url=url, params=params, verify=self.verify_ssl, timeout=self.tts_timeout
+                )
                 if r.ok:
                     return r.content
                 self.log.error(f"Failed to get audio, response from {url}: {r.text}")
