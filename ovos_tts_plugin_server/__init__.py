@@ -28,7 +28,7 @@ class OVOSServerTTS(TTS):
 
     @property
     def host(self) -> Optional[list]:
-    """If using a custom server, set the host here, otherwise it defaults to public servers."""
+        """If using a custom server, set the host here, otherwise it defaults to public servers."""
         hosts = self.config.get("host", self.config.get("hosts"))
         if hosts and not isinstance(hosts, list):
             hosts = [hosts]
