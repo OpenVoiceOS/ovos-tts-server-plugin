@@ -27,6 +27,11 @@ class OVOSServerTTS(TTS):
             )
 
     @property
+    def host(self) -> Optional[str]:
+        self.log.warning("Deprecation Warning: use self.urls instead")
+        return self.urls
+
+    @property
     def urls(self) -> Optional[str]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
         urls = self.config.get("host", self.config.get("hosts"))
