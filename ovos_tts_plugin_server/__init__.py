@@ -27,9 +27,14 @@ class OVOSServerTTS(TTS):
             )
 
     @property
-    def host(self) -> Optional[str]:
+    def urls(self) -> Optional[str]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
-        return self.config.get("host", None)
+        urls = self.config.get("host", self.config.get("hosts"))
+        if urls and not isinstance(urls, list):
+            urls = [urls]
+        else:
+            urls = random.shuffle(self.public_servers)
+        return urls
 
     @property
     def v2(self) -> bool:
@@ -56,14 +61,7 @@ class OVOSServerTTS(TTS):
         }
         if not voice or voice == "default":
             params.pop("voice")
-        if self.host:
-            if isinstance(self.host, str):
-                servers: List[str] = [self.host]
-            else:
-                servers = self.host
-        else:
-            servers = self.public_servers
-        data: bytes = self._fetch_audio_data(params, sentence, servers)
+        data: bytes = self._fetch_audio_data(params, sentence, self.urls)
         self._write_audio_file(wav_file, data)
         return wav_file, None
 
@@ -71,10 +69,9 @@ class OVOSServerTTS(TTS):
         with open(file=wav_file, mode="wb") as f:
             f.write(data)
 
-    def _fetch_audio_data(self, params: dict, sentence: str, servers: list) -> bytes:
+    def _fetch_audio_data(self, params: dict, sentence: str, urls: list) -> bytes:
         """Get audio bytes from servers."""
-        random.shuffle(servers)  # Spread the load among all public servers
-        for url in servers:
+        for url in urls:
             try:
                 if self.v2:
                     url = f"{url}/v2/synthesize"
