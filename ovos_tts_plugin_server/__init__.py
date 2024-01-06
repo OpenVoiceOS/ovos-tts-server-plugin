@@ -44,8 +44,13 @@ class OVOSServerTTS(TTS):
         """Whether or not to verify SSL certificates when connecting to the server. Defaults to True."""
         return self.config.get("verify_ssl", True)
 
-    def get_tts(self, sentence, wav_file, lang: Optional[str] = None,
-                voice: Optional[str] = None) -> Tuple[Any, None]:
+    def get_tts(
+        self,
+        sentence,
+        wav_file,
+        lang: Optional[str] = None,
+        voice: Optional[str] = None,
+    ) -> Tuple[Any, None]:
         """Fetch TTS audio using OVOS TTS server.
         Language and voice can be overridden, otherwise defaults to config."""
         params: Dict[str, Optional[str]] = {
@@ -54,7 +59,10 @@ class OVOSServerTTS(TTS):
         }
         if not voice or voice == "default":
             params.pop("voice")
-        servers = self.host or random.shuffle(self.public_servers)
+        if self.host:
+            servers = self.host
+        else:
+            servers = random.shuffle(self.public_servers)
         data: bytes = self._fetch_audio_data(params, sentence, servers)
         self._write_audio_file(wav_file, data)
         return wav_file, None
