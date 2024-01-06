@@ -43,7 +43,7 @@ def test_host_property(tts_instance, tts_instance_factory):
 
 def test_tts_timeout_property(tts_instance):
     # Default behavior - No timeout set
-    assert tts_instance.tts_timeout == 30
+    assert tts_instance.tts_timeout == 5
 
     # Custom timeout set
     custom_timeout = 10
@@ -208,5 +208,5 @@ def test_v2_property_passing(_, mock_requests, tts_instance_factory):
         url="https://customhost.com/synthesize/test",
         params={"lang": "en-us"},
         verify=True,
-        timeout=30,
+        timeout=5,
     )

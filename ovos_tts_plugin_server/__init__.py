@@ -43,8 +43,8 @@ class OVOSServerTTS(TTS):
 
     @property
     def tts_timeout(self) -> int:
-        """Timeout for the TTS server. Defaults to 30 seconds."""
-        return self.config.get("tts_timeout", 30)
+        """Timeout for the TTS server. Defaults to 5 seconds."""
+        return self.config.get("tts_timeout", 5)
 
     def get_tts(
         self,
