@@ -27,19 +27,12 @@ class OVOSServerTTS(TTS):
             )
 
     @property
-    def host(self) -> Optional[str]:
-        self.log.warning("Deprecation Warning: use self.urls instead")
-        return self.urls
-
-    @property
-    def urls(self) -> List[Any]:
-        """If using a custom server, set the host here, otherwise it defaults to public servers."""
-        urls = self.config.get("host", self.config.get("hosts"))
-        if urls and not isinstance(urls, list):
-            urls = [urls]
-        else:
-            urls = random.shuffle(self.public_servers)
-        return urls
+    def host(self) -> Optional[list]:
+    """If using a custom server, set the host here, otherwise it defaults to public servers."""
+        hosts = self.config.get("host", self.config.get("hosts"))
+        if hosts and not isinstance(hosts, list):
+            hosts = [hosts]
+        return hosts
 
     @property
     def v2(self) -> bool:
@@ -51,13 +44,8 @@ class OVOSServerTTS(TTS):
         """Whether or not to verify SSL certificates when connecting to the server. Defaults to True."""
         return self.config.get("verify_ssl", True)
 
-    def get_tts(
-        self,
-        sentence,
-        wav_file,
-        lang: Optional[str] = None,
-        voice: Optional[str] = None,
-    ) -> Tuple[Any, None]:
+    def get_tts(self, sentence, wav_file, lang: Optional[str] = None,
+                voice: Optional[str] = None) -> Tuple[Any, None]:
         """Fetch TTS audio using OVOS TTS server.
         Language and voice can be overridden, otherwise defaults to config."""
         params: Dict[str, Optional[str]] = {
@@ -66,7 +54,8 @@ class OVOSServerTTS(TTS):
         }
         if not voice or voice == "default":
             params.pop("voice")
-        data: bytes = self._fetch_audio_data(params, sentence, self.urls)
+        servers = self.host or random.shuffle(self.public_servers)
+        data: bytes = self._fetch_audio_data(params, sentence, servers)
         self._write_audio_file(wav_file, data)
         return wav_file, None
 
@@ -74,9 +63,9 @@ class OVOSServerTTS(TTS):
         with open(file=wav_file, mode="wb") as f:
             f.write(data)
 
-    def _fetch_audio_data(self, params: dict, sentence: str, urls: list) -> bytes:
+    def _fetch_audio_data(self, params: dict, sentence: str, servers: list) -> bytes:
         """Get audio bytes from servers."""
-        for url in urls:
+        for url in servers:
             try:
                 if self.v2:
                     url = f"{url}/v2/synthesize"
