@@ -8,9 +8,7 @@ from urllib3.util.retry import Retry
 from ovos_tts_plugin_server import OVOSServerTTS
 
 
-def requests_retry_session(
-    retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 503, 504)
-):
+def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 503, 504)):
     session = requests.Session()
     retry = Retry(
         total=retries,
@@ -26,9 +24,7 @@ def requests_retry_session(
 
 
 def test_tts_plugin_e2e():
-    tts_instance = OVOSServerTTS(
-        config={"host": "http://localhost:9666"}
-    )
+    tts_instance = OVOSServerTTS(config={"host": "http://localhost:9666"})
     tts_instance.get_tts(sentence="Hello%20world", wav_file="test.wav")
     assert os.path.exists(path="test.wav")
     assert os.path.getsize(filename="test.wav") > 0

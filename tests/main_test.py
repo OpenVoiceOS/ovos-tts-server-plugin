@@ -38,12 +38,10 @@ def test_host_property(tts_instance, tts_instance_factory):
     custom_host = "https://customhost.com"
     custom_tts_instance = tts_instance_factory({"host": custom_host})
     assert tts_instance.host != custom_tts_instance.host
-    assert custom_tts_instance.host == custom_host
+    assert custom_tts_instance.host == [custom_host]
 
 
-@pytest.mark.parametrize(
-    "host,expected", [(None, True), ("https://customhost.com", False)]
-)
+@pytest.mark.parametrize("host,expected", [(None, True), ("https://customhost.com", False)])
 def test_v2_property(tts_instance, host, expected):
     tts_instance.config["host"] = host
     assert tts_instance.v2 is expected
@@ -62,9 +60,7 @@ def test_verify_ssl_property(tts_instance):
     assert tts_instance.verify_ssl is True
 
 
-@patch(
-    "ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data"
-)
+@patch("ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data")
 @patch("ovos_tts_plugin_server.OVOSServerTTS._write_audio_file")
 def test_get_tts(mock_write_audio, mock_fetch_audio, tts_instance):
     sentence = "test sentence"
@@ -151,14 +147,10 @@ def test_validator(tts_instance):
     assert tts_instance.validator.get_tts_class() == OVOSServerTTS
 
 
-@patch(
-    "ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data"
-)
+@patch("ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data")
 @patch("ovos_tts_plugin_server.OVOSServerTTS._write_audio_file")
 def test_get_tts_param_change(_, fetch_audio_data, tts_instance):
-    tts_instance.get_tts(
-        sentence="test", wav_file="test.wav", lang="en-us", voice="default"
-    )
+    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-us", voice="default")
     fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", PUBLIC_TTS_SERVERS)
     fetch_audio_data.reset_mock()
 
@@ -166,25 +158,17 @@ def test_get_tts_param_change(_, fetch_audio_data, tts_instance):
     fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", PUBLIC_TTS_SERVERS)
     fetch_audio_data.reset_mock()
 
-    tts_instance.get_tts(
-        sentence="test", wav_file="test.wav", lang="en-us", voice="apope-low"
-    )
-    fetch_audio_data.assert_called_with(
-        {"lang": "en-us", "voice": "apope-low"}, "test", PUBLIC_TTS_SERVERS
-    )
+    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-us", voice="apope-low")
+    fetch_audio_data.assert_called_with({"lang": "en-us", "voice": "apope-low"}, "test", PUBLIC_TTS_SERVERS)
 
 
-@patch(
-    "ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data"
-)
+@patch("ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data")
 @patch("ovos_tts_plugin_server.OVOSServerTTS._write_audio_file")
 def test_get_tts_server_lists(_, fetch_audio_data, tts_instance_factory):
     # Default behavior - No host set
     tts_instance = tts_instance_factory(config={})
     tts_instance.get_tts("test", "test.wav")
-    fetch_audio_data.assert_called_with(
-        {"lang": "en-us"}, "test", tts_instance.public_servers
-    )
+    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", tts_instance.public_servers)
     fetch_audio_data.reset_mock()
     # Custom host set
     custom_host = "https://customhost.com"
@@ -207,9 +191,7 @@ def test_v2_property_passing(_, mock_requests, tts_instance_factory):
     assert tts_instance.v2 is True
 
     # Custom host set
-    tts_instance = tts_instance_factory(
-        config={"v2": False, "host": "https://customhost.com"}
-    )
+    tts_instance = tts_instance_factory(config={"v2": False, "host": "https://customhost.com"})
     assert tts_instance.v2 is False
     tts_instance.get_tts("test", "test.wav")
     mock_requests.assert_called_with(

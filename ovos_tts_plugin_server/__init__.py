@@ -6,10 +6,7 @@ import requests
 from ovos_plugin_manager.templates.tts import TTS, RemoteTTSException, TTSValidator
 from ovos_utils.log import LOG
 
-PUBLIC_TTS_SERVERS = [
-    "https://pipertts.ziggyai.online",
-    "https://tts.smartgic.io/piper",
-]
+PUBLIC_TTS_SERVERS = ["https://pipertts.ziggyai.online", "https://tts.smartgic.io/piper"]
 
 
 class OVOSServerTTS(TTS):
@@ -29,10 +26,13 @@ class OVOSServerTTS(TTS):
     @property
     def host(self) -> Optional[list]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
-        hosts = self.config.get("host", self.config.get("hosts"))
+        hosts = self.config.get("host")
         if hosts and not isinstance(hosts, list):
             hosts = [hosts]
         return hosts
+
+    # @property
+    # def public_servers(self) -> list:
 
     @property
     def v2(self) -> bool:
@@ -62,7 +62,7 @@ class OVOSServerTTS(TTS):
         if self.host:
             servers = self.host
         else:
-            servers = random.shuffle(self.public_servers)
+            servers = [random.shuffle(self.public_servers)]
         data: bytes = self._fetch_audio_data(params, sentence, servers)
         self._write_audio_file(wav_file, data)
         return wav_file, None
