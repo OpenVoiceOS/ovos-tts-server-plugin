@@ -16,9 +16,15 @@ pip install ovos-tts-plugin-server
     "ovos-tts-plugin-server": {"host": "https://0.0.0.0:9666"},
     "host": "https://tts.smartgic.io/piper",
     "v2": true,
-    "verify_ssl": true
+    "verify_ssl": true,
+    "tts_timeout": 5,
  }
 ```
+
+- host: the url of the tts server. `/synthesize` will be appended to it in the code
+- v2: use the v2 api, if available
+- verify_ssl: verify the ssl certificate of the server. If you use a self-signed certificate, you can set this to false, [but it is not recommended](#security-warning)
+- tts_timeout: timeout for the request to the server. Defaults to 5 seconds.
 
 ### As of ovos-tts-server 0.0.3a10
 
