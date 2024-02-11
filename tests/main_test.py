@@ -211,5 +211,5 @@ def test_v2_property_passing(_, mock_requests, tts_instance_factory):
         url="https://customhost.com/synthesize/test",
         params={"lang": "en-us"},
         verify=True,
-        timeout=5,
+        timeout=30,
     )
