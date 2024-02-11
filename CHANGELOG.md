@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.2a11](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a11) (2024-01-07)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a10...0.0.2a11)
+
+**Implemented enhancements:**
+
+- feat: configurable timeout [\#18](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/18) ([mikejgray](https://github.com/mikejgray))
+
 ## [0.0.2a10](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a10) (2024-01-02)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a9...0.0.2a10)
