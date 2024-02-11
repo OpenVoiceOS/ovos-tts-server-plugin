@@ -6,10 +6,7 @@ import requests
 from ovos_plugin_manager.templates.tts import TTS, RemoteTTSException, TTSValidator
 from ovos_utils.log import LOG
 
-PUBLIC_TTS_SERVERS = [
-    "https://pipertts.ziggyai.online",
-    "https://tts.smartgic.io/piper",
-]
+PUBLIC_TTS_SERVERS = ["https://pipertts.ziggyai.online", "https://tts.smartgic.io/piper"]
 
 
 class OVOSServerTTS(TTS):
@@ -27,9 +24,12 @@ class OVOSServerTTS(TTS):
             )
 
     @property
-    def host(self) -> Optional[str]:
+    def host(self) -> Optional[list]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
-        return self.config.get("host", None)
+        hosts = self.config.get("host")
+        if hosts and not isinstance(hosts, list):
+            hosts = [hosts]
+        return hosts
 
     @property
     def v2(self) -> bool:
@@ -62,11 +62,9 @@ class OVOSServerTTS(TTS):
         if not voice or voice == "default":
             params.pop("voice")
         if self.host:
-            if isinstance(self.host, str):
-                servers: List[str] = [self.host]
-            else:
-                servers = self.host
+            servers = self.host
         else:
+            random.shuffle(self.public_servers)
             servers = self.public_servers
         data: bytes = self._fetch_audio_data(params, sentence, servers)
         self._write_audio_file(wav_file, data)
@@ -78,7 +76,6 @@ class OVOSServerTTS(TTS):
 
     def _fetch_audio_data(self, params: dict, sentence: str, servers: list) -> bytes:
         """Get audio bytes from servers."""
-        random.shuffle(servers)  # Spread the load among all public servers
         for url in servers:
             try:
                 if self.v2:
@@ -86,9 +83,8 @@ class OVOSServerTTS(TTS):
                     params["utterance"] = sentence
                 else:
                     url = f"{url}/synthesize/{sentence}"
-                r: requests.Response = requests.get(
-                    url=url, params=params, verify=self.verify_ssl, timeout=self.tts_timeout
-                )
+                self.log.debug(f"Chosen TTS server {url}")
+                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=self.tts_timeout)
                 if r.ok:
                     return r.content
                 self.log.error(f"Failed to get audio, response from {url}: {r.text}")

@@ -38,8 +38,7 @@ def test_host_property(tts_instance, tts_instance_factory):
     custom_host = "https://customhost.com"
     custom_tts_instance = tts_instance_factory({"host": custom_host})
     assert tts_instance.host != custom_tts_instance.host
-    assert custom_tts_instance.host == custom_host
-
+    assert custom_tts_instance.host == [custom_host]
 
 def test_tts_timeout_property(tts_instance):
     # Default behavior - No timeout set
@@ -49,7 +48,6 @@ def test_tts_timeout_property(tts_instance):
     custom_timeout = 10
     tts_instance.config["tts_timeout"] = custom_timeout
     assert tts_instance.tts_timeout == custom_timeout
-
 
 @pytest.mark.parametrize("host,expected", [(None, True), ("https://customhost.com", False)])
 def test_v2_property(tts_instance, host, expected):
@@ -190,6 +188,11 @@ def test_get_tts_server_lists(_, fetch_audio_data, tts_instance_factory):
     custom_hosts = ["https://customhost1.com", "https://customhost2.com"]
     tts_instance = tts_instance_factory(config={"host": custom_hosts})
     tts_instance.get_tts("test", "test.wav")
+    # Ensure custom list is NOT shuffled
+    i = 0
+    for host in custom_hosts:
+        assert custom_hosts[i] == tts_instance.host[i]
+        i += 1
     fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", custom_hosts)
 
 
