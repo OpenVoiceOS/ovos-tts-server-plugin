@@ -84,7 +84,7 @@ class OVOSServerTTS(TTS):
                 else:
                     url = f"{url}/synthesize/{sentence}"
                 self.log.debug(f"Chosen TTS server {url}")
-                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=30)
+                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=self.tts_timeout)
                 if r.ok:
                     return r.content
                 self.log.error(f"Failed to get audio, response from {url}: {r.text}")
