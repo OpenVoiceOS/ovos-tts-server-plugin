@@ -13,12 +13,13 @@ pip install ovos-tts-plugin-server
 ```json
   "tts": {
     "module": "ovos-tts-plugin-server",
-    "ovos-tts-plugin-server": {"host": "https://0.0.0.0:9666"},
-    "host": "https://tts.smartgic.io/piper",
-    "v2": true,
-    "verify_ssl": true,
-    "tts_timeout": 5,
- }
+    "ovos-tts-plugin-server": {
+        "host": "https://tts.smartgic.io/piper",
+        "v2": true,
+        "verify_ssl": true,
+        "tts_timeout": 5
+     }
+ } 
 ```
 
 - host: the url of the tts server. `/synthesize` will be appended to it in the code
