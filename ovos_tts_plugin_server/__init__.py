@@ -33,8 +33,8 @@ class OVOSServerTTS(TTS):
 
     @property
     def v2(self) -> bool:
-        """If using default public servers, default to v2, else v1"""
-        return self.config.get("v2", self.host is None)
+        """default to v2"""
+        return self.config.get("v2", True)
 
     @property
     def verify_ssl(self) -> bool:
