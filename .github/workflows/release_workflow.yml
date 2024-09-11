@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
     with:
       branch: 'dev'
-      version_file: 'ovos_translate_server_plugin/version.py'
+      version_file: 'ovos_tts_plugin_server/version.py'
       setup_py: 'setup.py'
       update_changelog: true
       publish_prerelease: true
