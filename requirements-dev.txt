@@ -1,0 +1,12 @@
+ovos-classifiers~=0.0.0a40
+pytest
+pytest-cov
+
+black
+bandit
+flake8
+isort
+ruff
+mypy
+types-requests
+safety

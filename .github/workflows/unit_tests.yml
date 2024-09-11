@@ -1,0 +1,49 @@
+name: Unit Tests
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-${{ matrix.python-version }}-
+            ${{ runner.os }}-python-
+
+      - name: Install dependencies
+        run: |-
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install .
+
+      - name: Lint
+        run: |-
+          black --line-length=119 .
+          bandit -ll -r ovos_tts_plugin_server
+          flake8 --max-line-length=119 ovos_tts_plugin_server
+          isort --profile black .
+          ruff ovos_tts_plugin_server
+          mypy --ignore-missing-imports --exclude tests ovos_tts_plugin_server
+          safety check --ignore=58755 --continue-on-error
+
+      - name: Test
+        run: pytest
