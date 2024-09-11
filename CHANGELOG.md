@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.2a15](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a15) (2024-09-11)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a14...0.0.2a15)
+
+**Merged pull requests:**
+
+- feat:semver [\#23](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/23) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.2a14](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.2a14) (2024-07-10)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.2a13...0.0.2a14)
