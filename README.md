@@ -32,7 +32,7 @@ pip install ovos-tts-plugin-server
 Similar to the use of several alternative STT servers different TTS servers can be specified in a list to increase reliability. The servers can be located in the local network or on the Internet. The following restrictions apply: The servers can only be addressed via the ```ovos-tts-plugin-server``` module (e.g. Piper_TTS) and the default voice and language of the server is used (mostly English). This can result in the text converted to speech being spoken in the intonation of a different language.
 
 ### Configuration example
-Example for using two local servers and rwo community servers. The servers are addressed one after the other. If one does not respond (within the timeout period), the next one is contacted.
+Example for using two local servers and two community servers. The servers are addressed one after the other. If one does not respond (within the timeout period), the next one is contacted.
 ```
 "tts": {
     "module": "ovos-tts-plugin-server",
