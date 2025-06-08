@@ -1,10 +1,10 @@
 """OpenVoiceOS companion plugin for OpenVoiceOS TTS Server."""
 import random
-from typing import Any, Dict, List, Optional, Tuple
-
 import requests
 from ovos_plugin_manager.templates.tts import TTS, RemoteTTSException, TTSValidator
+from ovos_utils import classproperty
 from ovos_utils.log import LOG
+from typing import Any, Dict, List, Optional, Tuple
 
 PUBLIC_TTS_SERVERS = ["https://pipertts.ziggyai.online", "https://tts.smartgic.io/piper"]
 
@@ -47,11 +47,11 @@ class OVOSServerTTS(TTS):
         return self.config.get("tts_timeout", 5)
 
     def get_tts(
-        self,
-        sentence,
-        wav_file,
-        lang: Optional[str] = None,
-        voice: Optional[str] = None,
+            self,
+            sentence,
+            wav_file,
+            lang: Optional[str] = None,
+            voice: Optional[str] = None,
     ) -> Tuple[Any, None]:
         """Fetch TTS audio using OVOS TTS server.
         Language and voice can be overridden, otherwise defaults to config."""
@@ -84,7 +84,8 @@ class OVOSServerTTS(TTS):
                 else:
                     url = f"{url}/synthesize/{sentence}"
                 self.log.debug(f"Chosen TTS server {url}")
-                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl, timeout=self.tts_timeout)
+                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl,
+                                                    timeout=self.tts_timeout)
                 if r.ok:
                     return r.content
                 self.log.error(f"Failed to get audio, response from {url}: {r.text}")
@@ -92,6 +93,16 @@ class OVOSServerTTS(TTS):
                 self.log.error(f"Failed to get audio from {url}: {err}")
                 continue
         raise RemoteTTSException("All OVOS TTS servers are down!")
+
+    @classproperty
+    def available_languages(self) -> set:
+        """Return languages supported by this TTS implementation in this state
+        This property should be overridden by the derived class to advertise
+        what languages that engine supports.
+        Returns:
+            set: supported languages
+        """
+        return set()  # TODO
 
 
 class OVOSServerTTSValidator(TTSValidator):
