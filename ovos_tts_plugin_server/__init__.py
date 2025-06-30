@@ -1,4 +1,6 @@
-"""OpenVoiceOS companion plugin for OpenVoiceOS TTS Server."""
+"""OpenVoiceOS companion plugin for OpenVoiceOS and OpenAI TTS Servers."""
+
+import json
 import random
 import requests
 from ovos_plugin_manager.templates.tts import TTS, RemoteTTSException, TTSValidator
@@ -24,12 +26,30 @@ class OVOSServerTTS(TTS):
             )
 
     @property
+    def api(self) -> str:
+        """Defaults to 'ovos' because of backwards compatibility."""
+        return self.config.get("api", "ovos")
+
+    @property
+    def apikey(self) -> str:
+        return self.config.get("apikey", None)
+
+    @property
     def host(self) -> Optional[list]:
         """If using a custom server, set the host here, otherwise it defaults to public servers."""
         hosts = self.config.get("host")
         if hosts and not isinstance(hosts, list):
             hosts = [hosts]
         return hosts
+
+    @property
+    def model(self) -> str:
+        return self.config.get("model", None)
+
+    @property
+    def tts_timeout(self) -> int:
+        """Timeout for the TTS server. Defaults to 5 seconds."""
+        return self.config.get("tts_timeout", 5)
 
     @property
     def v2(self) -> bool:
@@ -42,31 +62,49 @@ class OVOSServerTTS(TTS):
         return self.config.get("verify_ssl", True)
 
     @property
-    def tts_timeout(self) -> int:
-        """Timeout for the TTS server. Defaults to 5 seconds."""
-        return self.config.get("tts_timeout", 5)
+    def voice(self) -> str:
+        return self.config.get("voice", None)
 
     def get_tts(
             self,
             sentence,
             wav_file,
+            api: Optional[str] = None, 
+            apikey: Optional[str] = None,
             lang: Optional[str] = None,
-            voice: Optional[str] = None,
+            model: Optional[str] = None,
+            voice: Optional[str] = None
     ) -> Tuple[Any, None]:
-        """Fetch TTS audio using OVOS TTS server.
-        Language and voice can be overridden, otherwise defaults to config."""
+        """Fetch TTS audio using a TTS server API. API defaults to OVOS TTS.
+        Language, model and voice can be overridden, otherwise defaults to config."""
         params: Dict[str, Optional[str]] = {
             "lang": lang or self.lang,
+            "model": model or self.model,
             "voice": voice or self.voice,
         }
         if not voice or voice == "default":
             params.pop("voice")
-        if self.host:
-            servers = self.host
-        else:
-            random.shuffle(self.public_servers)
-            servers = self.public_servers
-        data: bytes = self._fetch_audio_data(params, sentence, servers)
+        if self.api == "ovos":
+            params.pop("model") # we can't set it in ovos tts
+            if self.host:
+                servers = self.host
+            else:
+                random.shuffle(self.public_servers)
+                servers = self.public_servers
+            data: bytes = self._fetch_audio_data_ovos(params, sentence, servers)
+        elif self.api == "openai":
+            params.pop("lang") # we can't set it in openai
+            if not model:
+                params["model"] = "default"
+            if not voice:
+                params["voice"] = "nova"
+            params["response_format"] = "wav"
+            if self.host:
+                servers = self.host
+            else: # we use official OpenAI service (paid!)
+                servers = "https://api.openai.com"
+            data: bytes = self._fetch_audio_data_openai(params, sentence, servers, self.apikey)
+
         self._write_audio_file(wav_file, data)
         return wav_file, None
 
@@ -74,8 +112,8 @@ class OVOSServerTTS(TTS):
         with open(file=wav_file, mode="wb") as f:
             f.write(data)
 
-    def _fetch_audio_data(self, params: dict, sentence: str, servers: list) -> bytes:
-        """Get audio bytes from servers."""
+    def _fetch_audio_data_ovos(self, params: dict, sentence: str, servers: list) -> bytes:
+        """Get audio bytes from OVOS TTS servers."""
         for url in servers:
             try:
                 if self.v2:
@@ -83,7 +121,7 @@ class OVOSServerTTS(TTS):
                     params["utterance"] = sentence
                 else:
                     url = f"{url}/synthesize/{sentence}"
-                self.log.debug(f"Chosen TTS server {url}")
+                self.log.debug(f"Chosen OVOS TTS server {url}")
                 r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl,
                                                     timeout=self.tts_timeout)
                 if r.ok:
@@ -93,6 +131,34 @@ class OVOSServerTTS(TTS):
                 self.log.error(f"Failed to get audio from {url}: {err}")
                 continue
         raise RemoteTTSException("All OVOS TTS servers are down!")
+
+    def _fetch_audio_data_openai(self, params: dict, sentence: str, servers: list, apikey: str) -> bytes:
+        """Get audio bytes from OpenAI TTS servers.
+        https://platform.openai.com/docs/api-reference/audio/createSpeech
+        https://github.com/erew123/alltalk_tts/wiki/API-%E2%80%90-OpenAI-V1-Speech-Compatible-Endpoint
+        """
+        for url in servers:
+            headers = {
+                "Content-Type": "application/json"
+            }
+            if apikey:
+                headers["Authorization"] = f"Bearer: {apikey}"
+            try:
+                url = f"{url}/v1/audio/speech"
+                params["input"] = sentence
+                data = json.dumps(params)
+                self.log.debug(f"Chosen OpenAI TTS server {url}")
+                self.log.debug(f"Request to OpenAI TTS server {data}")
+                r: requests.Response = requests.post(url=url, headers=headers, data=data,
+                                                    verify=self.verify_ssl,
+                                                    timeout=self.tts_timeout)
+                if r.ok:
+                    return r.content
+                self.log.error(f"Failed to get audio, response from {url}: {r.text}")
+            except Exception as err:  # pylint: disable=broad-except
+                self.log.error(f"Failed to get audio from {url}: {err}")
+                continue
+        raise RemoteTTSException("All OpenAI TTS servers are down!")
 
     @classproperty
     def available_languages(self) -> set:
