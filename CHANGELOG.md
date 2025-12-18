@@ -1,8 +1,16 @@
 # Changelog
 
+## [0.0.5a2](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a2) (2025-12-18)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a1...0.0.5a2)
+
+**Merged pull requests:**
+
+- chore: Configure Renovate [\#32](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/32) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.0.5a1](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a1) (2025-11-05)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/V0.0.4...0.0.5a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.4...0.0.5a1)
 
 **Closed issues:**
 
@@ -11,10 +19,6 @@
 **Merged pull requests:**
 
 - Update requirements.txt [\#30](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/30) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.4](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/V0.0.4) (2025-06-08)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.4...V0.0.4)
 
 
 
