@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.5a4](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a4) (2025-12-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a3...0.0.5a4)
+
+**Merged pull requests:**
+
+- chore\(deps\): update actions/cache action to v5 [\#38](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/38) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.0.5a3](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a3) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a2...0.0.5a3)
@@ -18,7 +26,7 @@
 
 ## [0.0.5a1](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a1) (2025-11-05)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.4...0.0.5a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/V0.0.4...0.0.5a1)
 
 **Closed issues:**
 
@@ -27,6 +35,10 @@
 **Merged pull requests:**
 
 - Update requirements.txt [\#30](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/30) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.0.4](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/V0.0.4) (2025-06-08)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.4...V0.0.4)
 
 
 
