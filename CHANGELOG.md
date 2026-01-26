@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.5a5](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a5) (2026-01-26)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a4...0.0.5a5)
+
+**Merged pull requests:**
+
+- chore\(deps\): update actions/setup-python action to v6 [\#40](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/40) ([renovate[bot]](https://github.com/apps/renovate))
+- chore\(deps\): update actions/checkout action to v6 [\#39](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/39) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.0.5a4](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a4) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a3...0.0.5a4)
