@@ -1,4 +1,4 @@
-ovos-tts-plugin-piper~=0.0.0
+ovos-tts-plugin-piper~=0.2.5
 # ovos-tts-plugin-espeakng~=0.0.2 # May be bugged
 ovos-tts-plugin-mimic~=0.2.8
 ovos-tts-plugin-beepspeak~=0.0.1a1
