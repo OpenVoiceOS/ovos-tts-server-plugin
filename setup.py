@@ -51,7 +51,7 @@ CONFIG_ENTRY_POINT = "ovos-tts-plugin-server.config = ovos_tts_plugin_server:OVO
 
 
 setup(
-    name="ovos-tts-plugin-server",
+    name="ovos_tts_plugin_server",
     version=get_version(),
     description="ovos tts server plugin for mycroft",
     long_description=get_description(),
