@@ -112,7 +112,8 @@ def test_fetch_audio_data_failure(mock_get, tts_instance):
     with pytest.raises(RemoteTTSException):
         tts_instance._fetch_audio_data({}, sentence, servers)
 
-    assert mock_get.call_count == len(servers)  # Ensure all servers are tried
+    # v2 default tries the v2 endpoint then falls back to the legacy endpoint per server
+    assert mock_get.call_count == len(servers) * 2  # Ensure all servers + fallbacks are tried
 
 
 @patch("ovos_tts_plugin_server.requests.get", side_effect=RequestException)
@@ -123,7 +124,8 @@ def test_fetch_audio_data_exception(mock_get, tts_instance):
     with pytest.raises(RemoteTTSException):
         tts_instance._fetch_audio_data({}, sentence, servers)
 
-    assert mock_get.call_count == len(servers)  # Ensure all servers are tried
+    # v2 default tries the v2 endpoint then falls back to the legacy endpoint per server
+    assert mock_get.call_count == len(servers) * 2  # Ensure all servers + fallbacks are tried
 
 
 @patch("ovos_utils.log.LOG.warning")

@@ -74,24 +74,44 @@ class OVOSServerTTS(TTS):
         with open(file=wav_file, mode="wb") as f:
             f.write(data)
 
+    def _request_audio(self, base_url: str, params: dict, sentence: str, v2: bool) -> Optional[bytes]:
+        """Request audio from a single server using the v2 or legacy endpoint.
+
+        Returns the audio bytes on success, or None if the server did not
+        return a usable response (so the caller can try a fallback/next server).
+        """
+        if v2:
+            url = f"{base_url}/v2/synthesize"
+            params = {**params, "utterance": sentence}
+        else:
+            url = f"{base_url}/synthesize/{sentence}"
+        self.log.debug(f"Chosen TTS server {url}")
+        try:
+            r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl,
+                                                timeout=self.tts_timeout)
+            if r.ok:
+                return r.content
+            self.log.error(f"Failed to get audio, response from {url}: {r.text}")
+        except Exception as err:  # pylint: disable=broad-except
+            self.log.error(f"Failed to get audio from {url}: {err}")
+        return None
+
     def _fetch_audio_data(self, params: dict, sentence: str, servers: list) -> bytes:
-        """Get audio bytes from servers."""
+        """Get audio bytes from servers.
+
+        When configured for v2 (the default) but a server does not serve the
+        v2 endpoint, fall back to the legacy endpoint on that same server
+        before moving on, so the plugin works against both server generations.
+        """
         for url in servers:
-            try:
-                if self.v2:
-                    url = f"{url}/v2/synthesize"
-                    params["utterance"] = sentence
-                else:
-                    url = f"{url}/synthesize/{sentence}"
-                self.log.debug(f"Chosen TTS server {url}")
-                r: requests.Response = requests.get(url=url, params=params, verify=self.verify_ssl,
-                                                    timeout=self.tts_timeout)
-                if r.ok:
-                    return r.content
-                self.log.error(f"Failed to get audio, response from {url}: {r.text}")
-            except Exception as err:  # pylint: disable=broad-except
-                self.log.error(f"Failed to get audio from {url}: {err}")
-                continue
+            data = self._request_audio(url, params, sentence, self.v2)
+            if data is not None:
+                return data
+            if self.v2:
+                # server may be a legacy server without the v2 endpoint
+                data = self._request_audio(url, params, sentence, v2=False)
+                if data is not None:
+                    return data
         raise RemoteTTSException("All OVOS TTS servers are down!")
 
     @classproperty
