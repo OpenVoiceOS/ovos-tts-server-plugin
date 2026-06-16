@@ -20,8 +20,9 @@ jobs:
             image: "ghcr.io/openvoiceos/espeakng:dev"
           - plugin: "ovos-tts-plugin-mimic"
             image: "ghcr.io/openvoiceos/mimic:dev"
-          - plugin: "ovos-tts-plugin-beepspeak"
-            image: "ghcr.io/openvoiceos/beepspeak-tts-server:master"
+          # beepspeak-tts-server:master is broken upstream (server-side
+          # KeyError 'BeepSpeak/r2d2/en-us' in ovos_tts_server). Re-add once
+          # a working image is published.
           - plugin: "ovos-tts-plugin-sam"
             image: "ghcr.io/openvoiceos/sam:dev"
 
