@@ -53,9 +53,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -U -r requirements.txt
-          pip install -U --pre -r requirements-e2e.txt
-          pip install .
+          pip install -U --pre '.[e2e]'
 
       - name: E2E Tests
         run: |

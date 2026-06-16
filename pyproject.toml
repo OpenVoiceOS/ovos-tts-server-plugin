@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos_tts_plugin_server"
+dynamic = ["version"]
+description = "ovos tts server plugin for mycroft"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [
+    {name = "JarbasAi", email = "jarbasai@mailfence.com"}
+]
+keywords = ["mycroft", "OpenVoiceOS", "OVOS", "plugin", "tts"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Text Processing :: Linguistic",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+dependencies = [
+    "ovos-plugin-manager>=1.0.0,<3.0.0",
+    "requests"
+]
+
+[project.optional-dependencies]
+test = [
+    "ovos-classifiers~=0.0.0a40",
+    "pytest",
+    "pytest-cov",
+    "black",
+    "bandit",
+    "flake8",
+    "isort",
+    "ruff",
+    "mypy",
+    "types-requests",
+    "safety"
+]
+e2e = [
+    "ovos-tts-plugin-piper~=0.0.0",
+    "ovos-tts-plugin-mimic~=0.2.8",
+    "ovos-tts-plugin-beepspeak~=0.0.1a1",
+    "ovos-tts-server~=0.0.3a10",
+    "pytest",
+    "pytest-cov",
+    "ovos-classifiers~=0.0.0a40"
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-tts-server-plugin"
+
+[project.entry-points."opm.tts"]
+"ovos-tts-plugin-server" = "ovos_tts_plugin_server:OVOSServerTTS"
+
+[project.entry-points."opm.tts.config"]
+"ovos-tts-plugin-server.config" = "ovos_tts_plugin_server:OVOSServerTTSConfig"
+
+[tool.setuptools.dynamic]
+version = {attr = "ovos_tts_plugin_server.version.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ovos_tts_plugin_server*"]

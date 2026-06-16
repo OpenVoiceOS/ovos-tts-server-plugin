@@ -1,7 +1,6 @@
 #!/bin/bash
 
-pip install -r requirements-dev.txt
-pip install .
+pip install '.[test]'
 
 black --line-length=119 .
 bandit -ll -r ovos_tts_plugin_server
