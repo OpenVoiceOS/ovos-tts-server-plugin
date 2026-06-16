@@ -12,6 +12,6 @@ jobs:
     with:
       python_version: '3.11'
       coverage_source: 'ovos_tts_plugin_server'
-      test_path: 'tests'
+      test_path: 'test'
       install_extras: '.[test]'
       min_coverage: 0

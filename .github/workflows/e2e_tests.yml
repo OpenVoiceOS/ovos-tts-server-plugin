@@ -57,4 +57,4 @@ jobs:
 
       - name: E2E Tests
         run: |
-          pytest tests/e2e.py
+          pytest test/e2e.py
