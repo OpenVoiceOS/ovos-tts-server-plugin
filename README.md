@@ -1,6 +1,6 @@
 ## Description
 
-OpenVoiceOS companion plugin for [OpenVoiceOS TTS Server](https://github.com/OpenVoiceOS/ovos-tts-server)
+This plugin connects OpenVoiceOS to an [OpenVoiceOS TTS Server](https://github.com/OpenVoiceOS/ovos-tts-server) instance. It sends text to the server and returns the synthesized audio to OVOS.
 
 ## Install
 
@@ -22,21 +22,24 @@ pip install ovos-tts-plugin-server
  } 
 ```
 
-- host: the url of the tts server. `/synthesize` will be appended to it in the code
-- v2: use the v2 api, if available
-- verify_ssl: verify the ssl certificate of the server. If you use a self-signed certificate, you can set this to false, [but it is not recommended](#security-warning)
-- tts_timeout: timeout for the request to the server. Defaults to 5 seconds.
+- `host`: the URL of the TTS server. The plugin appends `/synthesize` to this URL.
+- `v2`: use the v2 API, if the server offers it.
+- `verify_ssl`: verify the server's SSL certificate. Set this to `false` for a self-signed certificate, but see the [security warning](#security-warning) before you do.
+- `tts_timeout`: timeout, in seconds, for a request to the server. The default is 5 seconds.
 
-### As of ovos-tts-server 0.0.3a10
+### v2 API (ovos-tts-server 0.0.3a10 and later)
 
-If using a TTS plugin with v2, you can use the `/v2` config option
-to take advantage of newer features. There is no need to change
-the `host`, however. It would always look something like: `https://tts.smartgic.io/piper`
-regardless of the `v2` value.
+If the TTS server plugin supports v2, set `v2` to `true` to use the newer API. The `host` value stays the same either way. For example, it stays `https://tts.smartgic.io/piper` regardless of the `v2` setting.
 
 ### Security warning
 
-Please note that while you can set `verify_ssl` to `false` to disable SSL
-verification, this is not recommended and should only be used for testing
-purposes. Consider using a private CA or certificates signed using
-[Let's Encrypt](https://letsencrypt.org/) instead.
+You can set `verify_ssl` to `false` to disable SSL verification, but this is not recommended. Use it only for testing. For production, use a private CA or a certificate from [Let's Encrypt](https://letsencrypt.org/) instead.
+
+## Related projects
+
+- [OpenVoiceOS/ovos-tts-server](https://github.com/OpenVoiceOS/ovos-tts-server) — the TTS server this plugin talks to.
+- [OpenVoiceOS/ovos-plugin-manager](https://github.com/OpenVoiceOS/ovos-plugin-manager) — loads and configures this plugin inside OVOS.
+
+## License
+
+Apache-2.0
