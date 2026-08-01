@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6a2](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a2) (2026-08-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.6a1...0.0.6a2)
+
+**Merged pull requests:**
+
+- docs: rewrite README in Simplified Technical English [\#54](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/54) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.6a1](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a1) (2026-06-16)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5...0.0.6a1)
