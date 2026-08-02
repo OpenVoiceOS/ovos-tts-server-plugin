@@ -35,6 +35,47 @@ If the TTS server plugin supports v2, set `v2` to `true` to use the newer API. T
 
 You can set `verify_ssl` to `false` to disable SSL verification, but this is not recommended. Use it only for testing. For production, use a private CA or a certificate from [Let's Encrypt](https://letsencrypt.org/) instead.
 
+## Self-hosting (recommended)
+
+Run your own server. Your text stays on your own hardware, you do not depend on
+somebody else's uptime, and you pick the voices.
+
+```bash
+pip install ovos-tts-server phoonnx
+ovos-tts-server --engine ovos-tts-plugin-phoonnx
+```
+
+[phoonnx](https://github.com/TigreGotico/phoonnx) is the recommended engine: it
+runs ONNX voices on CPU across 1000+ languages, downloads a voice the first time
+it is used, and can pick a default voice per language, so one server covers all
+of them. A prebuilt image is available too — see phoonnx's
+[docker docs](https://github.com/TigreGotico/phoonnx/blob/dev/docs/docker.md).
+
+Then point this plugin at it:
+
+```json
+  "tts": {
+    "module": "ovos-tts-plugin-server",
+    "ovos-tts-plugin-server": {
+      "host": "https://your-server.example",
+      "v2": true
+    }
+  }
+```
+
+## Public servers
+
+With no `host` configured, the plugin falls back to public servers.
+
+> **These are a community courtesy, not a service.** They exist so you can try
+> OVOS without setting anything up first. They are provided on a best-effort
+> basis with **no guarantees** of uptime, latency, voice availability, privacy,
+> or continued existence, and they can change or disappear without notice. They
+> are meant for demos, evaluation and onboarding — **not for production, and
+> not for anything you would not want a third party to receive**.
+>
+> For anything beyond trying it out, [self-host](#self-hosting-recommended).
+
 ## Related projects
 
 - [OpenVoiceOS/ovos-tts-server](https://github.com/OpenVoiceOS/ovos-tts-server) — the TTS server this plugin talks to.
