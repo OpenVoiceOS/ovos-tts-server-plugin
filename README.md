@@ -76,8 +76,6 @@ With no `host` configured, the plugin falls back to public servers.
 >
 > For anything beyond trying it out, [self-host](#self-hosting-recommended).
 
-Status page: https://github.com/TigreGotico/public-servers
-
 ## Related projects
 
 - [OpenVoiceOS/ovos-tts-server](https://github.com/OpenVoiceOS/ovos-tts-server) — the TTS server this plugin talks to.
