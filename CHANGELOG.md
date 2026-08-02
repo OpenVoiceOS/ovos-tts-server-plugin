@@ -1,24 +1,28 @@
 # Changelog
 
-## [0.0.5a2](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a2) (2025-12-18)
+## [0.0.6a3](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a3) (2026-08-02)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5a1...0.0.5a2)
-
-**Merged pull requests:**
-
-- chore: Configure Renovate [\#32](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/32) ([renovate[bot]](https://github.com/apps/renovate))
-
-## [0.0.5a1](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.5a1) (2025-11-05)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.4...0.0.5a1)
-
-**Closed issues:**
-
-- Wrong voice or accent when playing sound [\#7](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/issues/7)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.6a2...0.0.6a3)
 
 **Merged pull requests:**
 
-- Update requirements.txt [\#30](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/30) ([JarbasAl](https://github.com/JarbasAl))
+- docs: lead with self-hosting; retire dead public server [\#56](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/56) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.0.6a2](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a2) (2026-08-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.6a1...0.0.6a2)
+
+**Merged pull requests:**
+
+- docs: rewrite README in Simplified Technical English [\#54](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/54) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.0.6a1](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a1) (2026-06-16)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.5...0.0.6a1)
+
+**Merged pull requests:**
+
+- chore: add missing shared CI workflows [\#49](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/49) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
