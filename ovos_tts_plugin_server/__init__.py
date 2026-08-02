@@ -6,7 +6,7 @@ from ovos_utils import classproperty
 from ovos_utils.log import LOG
 from typing import Any, Dict, List, Optional, Tuple
 
-PUBLIC_TTS_SERVERS = ["https://pipertts.ziggyai.online", "https://tts.smartgic.io/piper"]
+PUBLIC_TTS_SERVERS = ["https://tts.openvoiceos.pt", "https://tts.smartgic.io/piper"]
 
 
 class OVOSServerTTS(TTS):
