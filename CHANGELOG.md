@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6a3](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a3) (2026-08-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.6a2...0.0.6a3)
+
+**Merged pull requests:**
+
+- docs: lead with self-hosting; retire dead public server [\#56](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/pull/56) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.6a2](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/tree/0.0.6a2) (2026-08-01)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-tts-server-plugin/compare/0.0.6a1...0.0.6a2)
