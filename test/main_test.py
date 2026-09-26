@@ -49,9 +49,14 @@ def test_tts_timeout_property(tts_instance):
     tts_instance.config["tts_timeout"] = custom_timeout
     assert tts_instance.tts_timeout == custom_timeout
 
-@pytest.mark.parametrize("host,expected", [(None, True), ("https://customhost.com", False)])
-def test_v2_property(tts_instance, host, expected):
-    tts_instance.config["host"] = host
+@pytest.mark.parametrize("v2,expected", [(None, True), (True, True), (False, False)])
+def test_v2_property(tts_instance, v2, expected):
+    # v2 defaults to True and is controlled solely by config["v2"],
+    # independent of whether a custom host is set.
+    if v2 is None:
+        tts_instance.config.pop("v2", None)
+    else:
+        tts_instance.config["v2"] = v2
     assert tts_instance.v2 is expected
 
 
@@ -107,7 +112,8 @@ def test_fetch_audio_data_failure(mock_get, tts_instance):
     with pytest.raises(RemoteTTSException):
         tts_instance._fetch_audio_data({}, sentence, servers)
 
-    assert mock_get.call_count == len(servers)  # Ensure all servers are tried
+    # v2 default tries the v2 endpoint then falls back to the legacy endpoint per server
+    assert mock_get.call_count == len(servers) * 2  # Ensure all servers + fallbacks are tried
 
 
 @patch("ovos_tts_plugin_server.requests.get", side_effect=RequestException)
@@ -118,7 +124,8 @@ def test_fetch_audio_data_exception(mock_get, tts_instance):
     with pytest.raises(RemoteTTSException):
         tts_instance._fetch_audio_data({}, sentence, servers)
 
-    assert mock_get.call_count == len(servers)  # Ensure all servers are tried
+    # v2 default tries the v2 endpoint then falls back to the legacy endpoint per server
+    assert mock_get.call_count == len(servers) * 2  # Ensure all servers + fallbacks are tried
 
 
 @patch("ovos_utils.log.LOG.warning")
@@ -158,16 +165,16 @@ def test_validator(tts_instance):
 @patch("ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data")
 @patch("ovos_tts_plugin_server.OVOSServerTTS._write_audio_file")
 def test_get_tts_param_change(_, fetch_audio_data, tts_instance):
-    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-us", voice="default")
-    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", PUBLIC_TTS_SERVERS)
+    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-US", voice="default")
+    fetch_audio_data.assert_called_with({"lang": "en-US"}, "test", PUBLIC_TTS_SERVERS)
     fetch_audio_data.reset_mock()
 
-    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-us")
-    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", PUBLIC_TTS_SERVERS)
+    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-US")
+    fetch_audio_data.assert_called_with({"lang": "en-US"}, "test", PUBLIC_TTS_SERVERS)
     fetch_audio_data.reset_mock()
 
-    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-us", voice="apope-low")
-    fetch_audio_data.assert_called_with({"lang": "en-us", "voice": "apope-low"}, "test", PUBLIC_TTS_SERVERS)
+    tts_instance.get_tts(sentence="test", wav_file="test.wav", lang="en-US", voice="apope-low")
+    fetch_audio_data.assert_called_with({"lang": "en-US", "voice": "apope-low"}, "test", PUBLIC_TTS_SERVERS)
 
 
 @patch("ovos_tts_plugin_server.OVOSServerTTS._fetch_audio_data", return_value=b"audio data")
@@ -176,13 +183,13 @@ def test_get_tts_server_lists(_, fetch_audio_data, tts_instance_factory):
     # Default behavior - No host set
     tts_instance = tts_instance_factory(config={})
     tts_instance.get_tts("test", "test.wav")
-    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", tts_instance.public_servers)
+    fetch_audio_data.assert_called_with({"lang": "en-US"}, "test", tts_instance.public_servers)
     fetch_audio_data.reset_mock()
     # Custom host set
     custom_host = "https://customhost.com"
     tts_instance = tts_instance_factory(config={"host": custom_host})
     tts_instance.get_tts("test", "test.wav")
-    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", [custom_host])
+    fetch_audio_data.assert_called_with({"lang": "en-US"}, "test", [custom_host])
     fetch_audio_data.reset_mock()
     # Multiple hosts set
     custom_hosts = ["https://customhost1.com", "https://customhost2.com"]
@@ -193,7 +200,7 @@ def test_get_tts_server_lists(_, fetch_audio_data, tts_instance_factory):
     for host in custom_hosts:
         assert custom_hosts[i] == tts_instance.host[i]
         i += 1
-    fetch_audio_data.assert_called_with({"lang": "en-us"}, "test", custom_hosts)
+    fetch_audio_data.assert_called_with({"lang": "en-US"}, "test", custom_hosts)
 
 
 @patch("requests.get")
@@ -209,7 +216,7 @@ def test_v2_property_passing(_, mock_requests, tts_instance_factory):
     tts_instance.get_tts("test", "test.wav")
     mock_requests.assert_called_with(
         url="https://customhost.com/synthesize/test",
-        params={"lang": "en-us"},
+        params={"lang": "en-US"},
         verify=True,
         timeout=5,
     )
